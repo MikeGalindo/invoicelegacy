@@ -1,0 +1,24 @@
+# Dependencias instaladas (npm install)
+node_modules/
+
+# Base de datos SQLite local, generada al arrancar.
+# La BD real de producción vive en el equipo de oficina, no en el repo.
+datos/*.db
+datos/*.db-journal
+datos/*.db-wal
+datos/*.db-shm
+datos/*.sqlite*
+
+# Logs y ficheros temporales
+*.log
+npm-debug.log*
+*.tmp
+
+# Cobertura de tests (node --test --experimental-test-coverage)
+coverage/
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
