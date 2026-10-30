@@ -1,0 +1,47 @@
+[
+  {
+    "numero": "FA-2026-000101",
+    "cabecera": { "base": 133.2, "iva": 27.97, "recargo": 0, "total": 161.17 },
+    "lineas": { "base": 133.2, "iva": 24.27, "recargo": 0 }
+  },
+  {
+    "numero": "FA-2026-000102",
+    "cabecera": { "base": 115.6, "iva": 24.28, "recargo": 6.01, "total": 145.89 },
+    "lineas": { "base": 115.6, "iva": 24.28, "recargo": 6.01 }
+  },
+  {
+    "numero": "FA-2026-000103",
+    "cabecera": { "base": 1000, "iva": 210, "recargo": 0, "total": 1210 },
+    "lineas": { "base": 1000, "iva": 210, "recargo": 0 }
+  },
+  {
+    "numero": "FA-2026-000104",
+    "cabecera": { "base": 152.3, "iva": 6.09, "recargo": 0.76, "total": 159.15 },
+    "lineas": { "base": 152.3, "iva": 6.09, "recargo": 0.76 }
+  },
+  {
+    "numero": "FA-2026-000105",
+    "cabecera": { "base": 2287.75, "iva": 468.63, "recargo": 0, "total": 2756.38 },
+    "lineas": { "base": 2335.5, "iva": 339.02, "recargo": 0 }
+  },
+  {
+    "numero": "FA-2026-000106",
+    "cabecera": { "base": 101.61, "iva": 20.62, "recargo": 0, "total": 122.23 },
+    "lineas": { "base": 101.61, "iva": 20.06, "recargo": 0 }
+  },
+  {
+    "numero": "RE-2026-000001",
+    "cabecera": { "base": -101.61, "iva": -20.62, "recargo": 0, "total": -122.23 },
+    "lineas": { "base": -101.61, "iva": -20.06, "recargo": 0 }
+  },
+  {
+    "numero": "FA-2026-000107",
+    "cabecera": { "base": 101.61, "iva": 20.62, "recargo": 0, "total": 122.23 },
+    "lineas": { "base": 101.61, "iva": 20.06, "recargo": 0 }
+  },
+  {
+    "numero": "FA-2026-000108",
+    "cabecera": { "base": 128.05, "iva": 26.19, "recargo": 0, "total": 154.24 },
+    "lineas": { "base": 128.05, "iva": 24.26, "recargo": 0 }
+  }
+]

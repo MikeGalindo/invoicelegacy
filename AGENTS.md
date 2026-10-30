@@ -21,7 +21,7 @@ Antes de tocar nada, lee `.specify/memory/constitution.md`: es normativa, no dec
 ```bash
 npm install --no-package-lock   # el package-lock está incompleto (falta node-addon-api de sqlite3)
 npm start                        # = node server.js → http://localhost:3000 (config.PUERTO)
-node --test                      # no hay script npm de test; runner nativo node:test
+npm test                         # TZ=Europe/Madrid node --test test/*.test.js
 node --test test/calculo.test.js # un solo fichero
 node --test --test-name-pattern="redondeo"   # un solo test
 ```

@@ -1,0 +1,760 @@
+{
+  "casos": [
+    {
+      "descripcion": "Factura manual de una línea, sin recargo ni descuento",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-02-06",
+        "lineas": [
+          {
+            "cantidad": 4,
+            "descripcion": "Desengrasante cocinas 10L",
+            "precio": 18.5,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000201",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "manual-simple",
+      "salida": {
+        "factura": {
+          "base": "74.00",
+          "descuentoPct": 0,
+          "fecha": "2026-02-06",
+          "iva": "15.54",
+          "lineas": [
+            {
+              "base": "74.00",
+              "cantidad": 4,
+              "cuotaIva": "15.54",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Desengrasante cocinas 10L",
+              "precio": "18.50",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000201",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "89.54",
+          "vencimiento": "2026-03-08"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Factura manual de una línea con recargo de equivalencia",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 1
+        },
+        "diasPago": null,
+        "fecha": "2026-02-06",
+        "lineas": [
+          {
+            "cantidad": 4,
+            "descripcion": "Desengrasante cocinas 10L",
+            "precio": 18.5,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000202",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "manual-recargo",
+      "salida": {
+        "factura": {
+          "base": "74.00",
+          "descuentoPct": 0,
+          "fecha": "2026-02-06",
+          "iva": "15.54",
+          "lineas": [
+            {
+              "base": "74.00",
+              "cantidad": 4,
+              "cuotaIva": "15.54",
+              "cuotaRecargo": "3.85",
+              "descripcion": "Desengrasante cocinas 10L",
+              "precio": "18.50",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000202",
+          "recargo": "3.85",
+          "serie": "FA",
+          "total": "93.39",
+          "vencimiento": "2026-03-08"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Factura manual de cuatro líneas, tres tipos de IVA y recargo",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 1
+        },
+        "diasPago": 60,
+        "fecha": "2026-03-31",
+        "lineas": [
+          {
+            "cantidad": 4,
+            "descripcion": "Desengrasante cocinas 10L",
+            "precio": 18.5,
+            "tipoIva": 21
+          },
+          {
+            "cantidad": 1,
+            "descripcion": "Plato llano hostelería 25cm",
+            "precio": 28.9,
+            "tipoIva": 21
+          },
+          {
+            "cantidad": 0.5,
+            "descripcion": "Vaso caña 20cl",
+            "precio": 21.6,
+            "tipoIva": 21
+          },
+          {
+            "cantidad": 2,
+            "descripcion": "Café en grano natural 1kg",
+            "precio": 11.95,
+            "tipoIva": 10
+          }
+        ],
+        "numero": "FA-2026-000203",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "manual-mixta",
+      "salida": {
+        "factura": {
+          "base": "137.60",
+          "descuentoPct": 0,
+          "fecha": "2026-03-31",
+          "iva": "26.27",
+          "lineas": [
+            {
+              "base": "74.00",
+              "cantidad": 4,
+              "cuotaIva": "15.54",
+              "cuotaRecargo": "3.85",
+              "descripcion": "Desengrasante cocinas 10L",
+              "precio": "18.50",
+              "tipoIva": 21
+            },
+            {
+              "base": "28.90",
+              "cantidad": 1,
+              "cuotaIva": "6.07",
+              "cuotaRecargo": "1.50",
+              "descripcion": "Plato llano hostelería 25cm",
+              "precio": "28.90",
+              "tipoIva": 21
+            },
+            {
+              "base": "10.80",
+              "cantidad": 0.5,
+              "cuotaIva": "2.27",
+              "cuotaRecargo": "0.56",
+              "descripcion": "Vaso caña 20cl",
+              "precio": "21.60",
+              "tipoIva": 21
+            },
+            {
+              "base": "23.90",
+              "cantidad": 2,
+              "cuotaIva": "2.39",
+              "cuotaRecargo": "0.33",
+              "descripcion": "Café en grano natural 1kg",
+              "precio": "11.95",
+              "tipoIva": 10
+            }
+          ],
+          "numero": "FA-2026-000203",
+          "recargo": "6.24",
+          "serie": "FA",
+          "total": "170.11",
+          "vencimiento": "2026-05-30"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Base 1.000,01: descuento del 2 %",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-03-05",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Pedido",
+            "precio": 1000.01,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000204",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "descuento-2-justo-encima",
+      "salida": {
+        "factura": {
+          "base": "980.01",
+          "descuentoPct": 2,
+          "fecha": "2026-03-05",
+          "iva": "205.80",
+          "lineas": [
+            {
+              "base": "980.01",
+              "cantidad": 1,
+              "cuotaIva": "205.80",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Pedido",
+              "precio": "980.01",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000204",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "1185.81",
+          "vencimiento": "2026-04-04"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Base 5.001: descuento del 5 %",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-03-05",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Pedido",
+            "precio": 5001,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000205",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "descuento-5-justo-encima",
+      "salida": {
+        "factura": {
+          "base": "4750.95",
+          "descuentoPct": 5,
+          "fecha": "2026-03-05",
+          "iva": "997.70",
+          "lineas": [
+            {
+              "base": "4750.95",
+              "cantidad": 1,
+              "cuotaIva": "997.70",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Pedido",
+              "precio": "4750.95",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000205",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "5748.65",
+          "vencimiento": "2026-04-04"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Base 1.000,00 justa: sin descuento",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-02-20",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Pedido",
+            "precio": 1000,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000206",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "frontera-1000",
+      "salida": {
+        "factura": {
+          "base": "1000.00",
+          "descuentoPct": 0,
+          "fecha": "2026-02-20",
+          "iva": "210.00",
+          "lineas": [
+            {
+              "base": "1000.00",
+              "cantidad": 1,
+              "cuotaIva": "210.00",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Pedido",
+              "precio": "1000.00",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000206",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "1210.00",
+          "vencimiento": "2026-03-22"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Base 5.000,00 justa: descuento del 2 %, no del 5 %",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-02-20",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Pedido",
+            "precio": 5000,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000207",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "frontera-5000",
+      "salida": {
+        "factura": {
+          "base": "4900.00",
+          "descuentoPct": 2,
+          "fecha": "2026-02-20",
+          "iva": "1029.00",
+          "lineas": [
+            {
+              "base": "4900.00",
+              "cantidad": 1,
+              "cuotaIva": "1029.00",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Pedido",
+              "precio": "4900.00",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000207",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "5929.00",
+          "vencimiento": "2026-03-22"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Dos líneas de 0,03: el IVA se redondea por línea",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-02-28",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "A",
+            "precio": 0.03,
+            "tipoIva": 21
+          },
+          {
+            "cantidad": 1,
+            "descripcion": "B",
+            "precio": 0.03,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000208",
+        "prorrateo": null,
+        "rectificar": false
+      },
+      "id": "redondeo-por-linea",
+      "salida": {
+        "factura": {
+          "base": "0.06",
+          "descuentoPct": 0,
+          "fecha": "2026-02-28",
+          "iva": "0.02",
+          "lineas": [
+            {
+              "base": "0.03",
+              "cantidad": 1,
+              "cuotaIva": "0.01",
+              "cuotaRecargo": "0.00",
+              "descripcion": "A",
+              "precio": "0.03",
+              "tipoIva": 21
+            },
+            {
+              "base": "0.03",
+              "cantidad": 1,
+              "cuotaIva": "0.01",
+              "cuotaRecargo": "0.00",
+              "descripcion": "B",
+              "precio": "0.03",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000208",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "0.08",
+          "vencimiento": "2026-03-30"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Cuota de 90 € con baja el 15 de marzo: 30 días frente a días reales",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-03-31",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Cuota marzo",
+            "precio": 90,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000209",
+        "prorrateo": {
+          "cuota": 90,
+          "desde": "2026-03-01",
+          "hasta": "2026-03-15",
+          "mes": "2026-03"
+        },
+        "rectificar": false
+      },
+      "id": "prorrateo-marzo",
+      "salida": {
+        "factura": {
+          "base": "90.00",
+          "descuentoPct": 0,
+          "fecha": "2026-03-31",
+          "iva": "18.90",
+          "lineas": [
+            {
+              "base": "90.00",
+              "cantidad": 1,
+              "cuotaIva": "18.90",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Cuota marzo",
+              "precio": "90.00",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000209",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "108.90",
+          "vencimiento": "2026-04-30"
+        },
+        "prorrateoComercial": "45.00",
+        "prorrateoDiasReales": "43.55",
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Cuota de 90 € con baja el 15 de febrero: 30 días frente a días reales",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-02-28",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Cuota febrero",
+            "precio": 90,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000210",
+        "prorrateo": {
+          "cuota": 90,
+          "desde": "2026-02-01",
+          "hasta": "2026-02-15",
+          "mes": "2026-02"
+        },
+        "rectificar": false
+      },
+      "id": "prorrateo-febrero",
+      "salida": {
+        "factura": {
+          "base": "90.00",
+          "descuentoPct": 0,
+          "fecha": "2026-02-28",
+          "iva": "18.90",
+          "lineas": [
+            {
+              "base": "90.00",
+              "cantidad": 1,
+              "cuotaIva": "18.90",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Cuota febrero",
+              "precio": "90.00",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000210",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "108.90",
+          "vencimiento": "2026-03-30"
+        },
+        "prorrateoComercial": "45.00",
+        "prorrateoDiasReales": "48.21",
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Factura de 2028-02-28 con vencimiento a 30 días y prorrateo de febrero bisiesto",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2028-02-28",
+        "lineas": [
+          {
+            "cantidad": 1,
+            "descripcion": "Cuota febrero 2028",
+            "precio": 90,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2028-000001",
+        "prorrateo": {
+          "cuota": 90,
+          "desde": "2028-02-01",
+          "hasta": "2028-02-15",
+          "mes": "2028-02"
+        },
+        "rectificar": false
+      },
+      "id": "febrero-bisiesto",
+      "salida": {
+        "factura": {
+          "base": "90.00",
+          "descuentoPct": 0,
+          "fecha": "2028-02-28",
+          "iva": "18.90",
+          "lineas": [
+            {
+              "base": "90.00",
+              "cantidad": 1,
+              "cuotaIva": "18.90",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Cuota febrero 2028",
+              "precio": "90.00",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2028-000001",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "108.90",
+          "vencimiento": "2028-03-29"
+        },
+        "prorrateoComercial": "45.00",
+        "prorrateoDiasReales": "46.55",
+        "rectificativa": null
+      }
+    },
+    {
+      "descripcion": "Rectificación espejo de la factura manual simple",
+      "entrada": {
+        "cliente": {
+          "recargo_equivalencia": 0
+        },
+        "diasPago": null,
+        "fecha": "2026-02-06",
+        "lineas": [
+          {
+            "cantidad": 4,
+            "descripcion": "Desengrasante cocinas 10L",
+            "precio": 18.5,
+            "tipoIva": 21
+          }
+        ],
+        "numero": "FA-2026-000212",
+        "prorrateo": null,
+        "rectificar": true
+      },
+      "id": "rectificativa",
+      "salida": {
+        "factura": {
+          "base": "74.00",
+          "descuentoPct": 0,
+          "fecha": "2026-02-06",
+          "iva": "15.54",
+          "lineas": [
+            {
+              "base": "74.00",
+              "cantidad": 4,
+              "cuotaIva": "15.54",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Desengrasante cocinas 10L",
+              "precio": "18.50",
+              "tipoIva": 21
+            }
+          ],
+          "numero": "FA-2026-000212",
+          "recargo": "0.00",
+          "serie": "FA",
+          "total": "89.54",
+          "vencimiento": "2026-03-08"
+        },
+        "prorrateoComercial": null,
+        "prorrateoDiasReales": null,
+        "rectificativa": {
+          "base": "-74.00",
+          "fecha": "2026-05-06",
+          "iva": "-15.54",
+          "lineas": [
+            {
+              "base": "-74.00",
+              "cantidad": -4,
+              "cuotaIva": "-15.54",
+              "cuotaRecargo": "0.00",
+              "descripcion": "Rectificación: Desengrasante cocinas 10L",
+              "precio": "18.50",
+              "tipoIva": 21
+            }
+          ],
+          "recargo": "0.00",
+          "rectifica_a": "FA-2026-000212",
+          "total": "-89.54",
+          "vencimiento": null
+        }
+      }
+    }
+  ],
+  "descripcion": "Salida completa del flujo central de cálculo, vencimiento, prorrateo y rectificación. Generado con las funciones puras actuales.",
+  "esquema": "gesfact-golden-master-flujo-central-v1",
+  "formatos": [
+    {
+      "entrada": 1234.5,
+      "salida": "1.234,50"
+    },
+    {
+      "entrada": -122.23,
+      "salida": "-122,23"
+    },
+    {
+      "entrada": 0.5,
+      "salida": "0,50"
+    },
+    {
+      "entrada": 1000,
+      "salida": "1.000,00"
+    },
+    {
+      "entrada": 2.675,
+      "salida": "2,67"
+    },
+    {
+      "entrada": 1.005,
+      "salida": "1,00"
+    }
+  ],
+  "redondeos": [
+    {
+      "entrada": 3.848,
+      "salida": 3.85
+    },
+    {
+      "entrada": 1.995,
+      "salida": 2
+    },
+    {
+      "entrada": 0.5616,
+      "salida": 0.56
+    },
+    {
+      "entrada": 2.675,
+      "salida": 2.68
+    },
+    {
+      "entrada": 1.005,
+      "salida": 1
+    },
+    {
+      "entrada": 1.255,
+      "salida": 1.25
+    },
+    {
+      "entrada": -2.675,
+      "salida": -2.67
+    },
+    {
+      "entrada": -1.005,
+      "salida": -1
+    },
+    {
+      "entrada": 0.005,
+      "salida": 0.01
+    },
+    {
+      "entrada": 0.015,
+      "salida": 0.02
+    },
+    {
+      "entrada": -0.015,
+      "salida": -0.01
+    }
+  ]
+}
