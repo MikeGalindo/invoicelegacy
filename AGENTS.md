@@ -9,8 +9,9 @@ Antes de tocar nada, lee `.specify/memory/constitution.md`: es normativa, no dec
   mensajes) no se cambia sin decisión escrita del negocio. Un bug aparente tampoco autoriza cambio.
 - Toda afirmación sobre el sistema debe citar evidencia: fichero:líneas, dato real de la BD o
   testimonio con nombre y fecha. Marca lo no verificado como `SUPOSICIÓN` y conviértelo en pregunta.
-- Los hallazgos se **registran**, no se corrigen. Aún no existe registro de anomalías en el repo; se
-  definirá en la fase de especificación. Nunca arregles de paso.
+- Los hallazgos se **registran**, no se corrigen. El registro de anomalías está en
+  `specs/000-reconocimiento/registro-anomalias.md`; cada entrada lleva evidencia, clasificación y
+  estado. Nunca arregles de paso.
 - Cero dependencias nuevas, cero actualizaciones, cero refactors, renombrados o reformateos.
 - Todo en español de España: documentación, commits, nombres y descripciones de tests, UI.
 - Conserva el estilo existente: ES5 (`var`, callbacks), plantillas EJS, sin capas nuevas.
