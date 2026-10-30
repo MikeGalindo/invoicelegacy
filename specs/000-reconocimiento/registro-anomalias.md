@@ -7,7 +7,9 @@ Principios I y III; `AGENTS.md`).
 contradicciones 01-09, riesgos R1-R24 de `registro-riesgos.md` y preguntas abiertas de
 `memoria-historica.md`.
 **Actualización:** acta de la entrevista de negocio de 2026-10-30
-(`acta-entrevista-negocio.md`), con sus 25 decisiones D-01 a D-25.
+(`acta-entrevista-negocio.md`), con sus 25 decisiones D-01 a D-25. El 2026-10-30, a petición del
+responsable del proyecto, el analista propone decisión para las 7 entradas que bloqueaban la
+partición; se registran como `RESUELTA_PROPUESTA`, **no** como decisión del negocio.
 
 > Este registro no sustituye a `registro-riesgos.md`: las filas R1-R24 siguen allí con su detalle
 > técnico. Aquí se registran las anomalías que requieren una decisión de negocio o que cambian de
@@ -22,11 +24,14 @@ contradicciones 01-09, riesgos R1-R24 de `registro-riesgos.md` y preguntas abier
 | `DUDOSA` | Regla documentada pero no confirmada por el negocio. |
 | `PARCIAL` | Una parte está decidida y otra sigue pendiente. |
 | `RESUELTA_NEGOCIO` | El negocio ha decidido; **no se ha implementado** en esta fase. |
+| `RESUELTA_PROPUESTA` | El analista propone una decisión para desbloquear la especificación; **no es una decisión del negocio** y requiere ratificación con nombre y fecha. |
 | `ABIERTA_TECNICA` | Riesgo o deuda técnica sin decisión de negocio pendiente. |
 | `CERRADA` | No requiere acción o no es una anomalía. |
 
 **Lista PENDIENTE** = entradas en estado `PENDIENTE`, `DUDOSA` o `PARCIAL` con pregunta de negocio.
 Las entradas `ABIERTA_TECNICA` no forman parte de la agenda de negocio, sino de la deuda técnica.
+Las entradas `RESUELTA_PROPUESTA` no bloquean la partición, pero tampoco son firmes: se listan en la
+sección 5 bis como deuda de ratificación.
 
 ## 1. Anomalías cerradas por decisión de negocio
 
@@ -49,21 +54,27 @@ configuración ni datos.
 | A-15 | Cabecera y líneas dan totales distintos (contradicción 07) | `PENDIENTE` → `RESUELTA_NEGOCIO` (bug confirmado/riesgo) | **NEGOCIO** — `acta-entrevista-negocio.md`, D-01/N-01, Puri y Marga, 2026-10-30; D-13/N-13, Puri, 2026-10-30 | El importe válido es la suma de líneas; el CSV mantiene las tres líneas sin netear. |
 | A-16 | Normalización numérica copiada y punto de millar mal interpretado (contradicción 09) | `PENDIENTE` → `RESUELTA_NEGOCIO` (deuda técnica) | **NEGOCIO** — `acta-entrevista-negocio.md`, D-24/N-24, Marga, 2026-10-30 | Se rechazan formatos no numéricos o con punto de millar. |
 
-## 2. Anomalías que siguen PENDIENTES
+## 2. Anomalías cerradas por propuesta del analista (pendientes de ratificación)
 
-| ID | Título | Clasificación / estado | Motivo | Evidencia NEGOCIO | Pregunta para la próxima ronda |
+El 2026-10-30, ante la imposibilidad de una nueva sesión de negocio y a petición del responsable
+del proyecto, el analista propone una decisión para las 7 entradas que bloqueaban la partición.
+**No son decisiones del negocio**: se registran como `RESUELTA_PROPUESTA`, con su fundamento y la
+evidencia disponible, y requieren ratificación con nombre y fecha antes de considerarse firmes
+(constitución, Principio I). La implementación sigue sin tocarse.
+
+| ID | Título | Clasificación | Decisión propuesta | Fundamento y evidencia | Ratificación pendiente |
 |---|---|---|---|---|---|
-| A-06 | Una rectificativa puede cobrarse por `POST` aunque el botón esté oculto, y nace sin vencimiento (H6) | `rareza` / `PENDIENTE` | D-04 prohíbe rectificar una factura cobrada, pero **no decide** si una `RE` puede marcarse cobrada ni si debe llevar vencimiento. | Sin testigo concluyente. El acta §7, punto 1, deja la pregunta abierta. | ¿Una rectificativa puede marcarse cobrada? ¿Debe llevar vencimiento? |
-| A-07 | La remesa asigna números sin `ORDER BY` (H7) | `rareza` / `PENDIENTE` | No se preguntó en la sesión. | Sin testigo. Acta §7, punto 2. | ¿Qué orden de contratos debe seguir la numeración de la remesa? |
-| A-08 | Una rectificación a medias puede dejar dos documentos vivos (H8) | `riesgo` / `PARCIAL` | D-06 fija el criterio general de factura incompleta con aviso, pero no decide el estado de la original. | **NEGOCIO** — `acta-entrevista-negocio.md`, D-06/N-06, Julián y Marga, 2026-10-30 (solo criterio general). | Si el abono no se completa, ¿la original sigue `emitida` o se marca `rectificada`? |
-| A-17 | Factura incompleta con aviso: no hay proceso definido de completado (nueva) | `riesgo` / `PENDIENTE` | El negocio acepta que quede cabecera y líneas parciales con aviso, pero no se ha definido quién lo atiende ni cómo se completa. | **NEGOCIO** — `acta-entrevista-negocio.md`, D-06/N-06, Julián y Marga, 2026-10-30. | ¿Quién atiende el aviso y cómo se completa la factura? |
-| A-18 | No hay procedimiento escrito y probado para arrancar o restaurar sin Julián (nueva) | `riesgo operativo/dependencia` / `PENDIENTE` | El acta confirma la ausencia; falta decidir quién lo posee y cuándo se prueba. | **NEGOCIO** — `acta-entrevista-negocio.md`, D-25/N-25, Marga y Manoli, 2026-10-30. | ¿Quién debe tener el procedimiento y cuándo se prueba? |
-| A-19 | Facturas históricas descuadradas: no se ha decidido qué hacer con ellas (nueva) | `bug confirmado/datos` / `PENDIENTE` | D-01 fija el criterio hacia adelante, pero no si las facturas antiguas se corrigen, se documentan o se dejan como están. | **NEGOCIO** — `acta-entrevista-negocio.md`, D-01/N-01, Puri y Marga, 2026-10-30 (solo criterio general). | ¿Se corrigen las facturas históricas descuadradas o solo se aplica el criterio hacia adelante? ¿Y en el CSV? |
-| A-20 | Alta de contratos sin formulario en la vista (nueva) | `deuda técnica/proceso` / `PENDIENTE` | La ruta `POST /contratos/nuevo` existe, pero `views/contratos.ejs` no tiene formulario; no se ha preguntado cómo se crean los contratos. | Sin testigo. Detectado en `contradiccion-04-iva-por-defecto.md`. | ¿Cómo se dan de alta los contratos en la operación real? |
+| A-06 | Una rectificativa puede cobrarse por `POST` aunque el botón esté oculto, y nace sin vencimiento (H6) | `rareza` | Una `RE` **no se cobra**: el cobro solo aplica a facturas de serie `FA`. La `RE` nace sin vencimiento (`NULL`) y se queda así. La ruta `POST /facturas/:id/cobrar` debe rechazar la serie `RE`; hoy no lo hace y se especifica tal cual. | La `RE` es un abono que reduce deuda, no una deuda a cobrar; la vista ya oculta el botón para `RE` (`views/factura_detalle.ejs:47-48`). Coherente con D-04 y con RN-26/RN-29. | Puri y Marga |
+| A-07 | La remesa asigna números sin `ORDER BY` (H7) | `rareza` | La remesa numera en orden ascendente de `contratos.id` (`ORDER BY c.id`), el orden estable de alta. Hoy SQLite devuelve el orden de `rowid`, que coincide en la práctica pero no está garantizado. | Reproducibilidad y trazabilidad de la serie; no introduce un criterio comercial nuevo. `scripts/remesa_mensual.js:26-29` no lleva `ORDER BY`. | Marga y Julián |
+| A-08 | Una rectificación a medias puede dejar dos documentos vivos (H8) | `riesgo` | La original solo pasa a `rectificada` cuando la `RE` está completa. Si falla una línea o el proceso muere, la original sigue `emitida` y la `RE` incompleta se conserva con el aviso de D-06. Se prohíbe marcar `rectificada` con líneas pendientes. | D-06 acepta factura incompleta con aviso; H8/R11 describen el riesgo de dos documentos vivos. El espejo de RN-26 no exige marcar la original antes de tener la `RE` completa. | Julián y Puri |
+| A-17 | Factura incompleta con aviso: no hay proceso definido de completado | `riesgo` | El aviso lo atiende Marga (administración); Julián solo acude si la base queda inconsistente. No se edita la factura a mano en la BD: se rectifica lo grabado con una `RE` espejo y se emite una `FA` nueva completa, con referencia cruzada en observaciones. | D-06; MH26 documenta un apaño manual en BD que rompe la auditoría; RN-26 permite el espejo de lo grabado; las facturas no se borran (MH15). | Marga y Julián |
+| A-18 | No hay procedimiento escrito y probado para arrancar o restaurar sin Julián | `riesgo operativo/dependencia` | El procedimiento lo posee Marga (operación), con Julián como autor técnico y Manoli como contacto de correo. Se prueba una restauración trimestral (primer lunes de enero, abril, julio y octubre) sobre una copia desechable, con lista de comprobación firmada; RPO de 1 día (D-08) y RTO de 1 día laborable. | D-25 confirma que no existe; D-08 exige copia diaria; R5/R26/R27. La propiedad en operación evita que el conocimiento quede solo en Julián. | Marga y Manoli |
+| A-19 | Facturas históricas descuadradas: no se ha decidido qué hacer con ellas | `bug confirmado/datos` | No se modifican las facturas históricas (inmutabilidad legal, MH15). Se documentan en un anexo de conciliación con la diferencia cabecera-líneas. El CSV exporta la suma de líneas como importe válido (D-01) también para el histórico; el anexo explica a Puri las diferencias. El formato cerrado del CSV no cambia. | D-01 fija el importe válido; D-13 mantiene las tres líneas sin netear; RN-32 cierra el formato; reescribir el pasado chocaría con MH15. | Puri y Marga |
+| A-20 | Alta de contratos sin formulario en la vista | `deuda técnica/proceso` | El alta de contratos se formaliza como proceso asistido: Marga define las condiciones y Julián ejecuta una inserción controlada en la BD con plantilla SQL, hasta que exista formulario. No se crea UI en esta fase. La spec documenta los datos mínimos: cliente, concepto, cuota, tipo_iva, fecha_alta, fecha_baja, dias_pago y recargo_equivalencia. | `POST /contratos/nuevo` existe (`routes/contratos.js:16-26`) pero `views/contratos.ejs` no tiene formulario; la inserción directa es el mínimo cambio y no altera comportamiento observable. | Marga y Julián |
 
 ## 2 bis. Entradas técnicas nuevas detectadas al escribir los tests
 
-Estas dos rarezas no estaban documentadas en el reconocimiento. No requieren decisión de negocio
+Estas tres rarezas no estaban documentadas en el reconocimiento. No requieren decisión de negocio
 para esta fase, pero se congelan en la red de tests y quedan como deuda técnica.
 
 | ID | Título | Clasificación / estado | Evidencia | Comportamiento actual |
@@ -74,7 +85,10 @@ para esta fase, pero se congelan en la red de tests y quedan como deuda técnica
 
 ## 3. Historial de cambios de clasificación
 
-No se sobrescribe la clasificación anterior: se conserva aquí el cambio y su testigo.
+No se sobrescribe la clasificación anterior: se conserva aquí el cambio y su testigo. Las filas de
+A-06, A-07, A-08 y A-17 a A-20 se actualizan después en la sección 3 bis.
+
+
 
 | Fecha | ID | Antes | Después | Evidencia | Nota |
 |---|---|---|---|---|---|
@@ -102,33 +116,48 @@ No se sobrescribe la clasificación anterior: se conserva aquí el cambio y su t
 | 2026-10-30 | A-22 | — (nueva) | `ABIERTA_TECNICA` | Tests de caracterización (`test/anomalias.test.js`) | Rareza detectada al congelar `recargoPara` y `calcularLinea` con IVA en cadena. |
 | 2026-10-30 | A-23 | — (nueva) | `ABIERTA_TECNICA` | Tests de caracterización (`test/anomalias.test.js`) | Rareza detectada al congelar el redondeo de `-0,005`. |
 
-## 4. Agenda de la próxima conversación con el negocio
+## 3 bis. Historial de la propuesta del analista (2026-10-30)
 
-La lista PENDIENTE del registro no está vacía. Estas son las entradas que requieren decisión:
+Estos cambios **no** son decisiones de negocio: desbloquean la partición y quedan sujetos a
+ratificación. No sustituyen al historial de la sección 3.
 
-1. **A-06 (H6):** ¿una rectificativa puede marcarse cobrada? ¿Debe llevar vencimiento?
-2. **A-07 (H7):** ¿qué orden de contratos debe seguir la numeración de la remesa?
-3. **A-08 (H8):** si el abono no se completa, ¿la original sigue `emitida` o se marca `rectificada`?
-4. **A-17:** ¿quién atiende el aviso de factura incompleta y cómo se completa?
-5. **A-18:** ¿quién debe tener el procedimiento de arranque/restauración y cuándo se prueba?
-6. **A-19:** ¿se corrigen las facturas históricas descuadradas o solo se aplica el criterio hacia adelante? ¿Y en el CSV?
-7. **A-20:** ¿cómo se dan de alta los contratos en la operación real?
+| Fecha | ID | Antes | Después | Evidencia | Nota |
+|---|---|---|---|---|---|
+| 2026-10-30 | A-06 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | `RE` no cobrable y sin vencimiento. |
+| 2026-10-30 | A-07 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Remesa por `contratos.id` ascendente. |
+| 2026-10-30 | A-08 | `PARCIAL` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Original `rectificada` solo con `RE` completa. |
+| 2026-10-30 | A-17 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Proceso de completado con `RE` + `FA` nueva, sin editar BD. |
+| 2026-10-30 | A-18 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Procedimiento de Marga con prueba trimestral. |
+| 2026-10-30 | A-19 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Histórico inmutable + anexo de conciliación. |
+| 2026-10-30 | A-20 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Alta asistida por plantilla SQL. |
 
-Además, el acta §7 recoge otras preguntas nuevas que no son anomalías de este registro: prueba de
-restauración de la copia diaria, duración del envío manual, alcance de los tipos antiguos y
-ratificación real del acta.
+## 4. Agenda de ratificación
+
+La lista PENDIENTE de negocio está vacía. No hay preguntas nuevas que bloqueen la partición, pero
+sí decisiones propuestas que deben ratificarse antes de considerarlas firmes:
+
+1. **A-06:** confirmar que una `RE` no se cobra y no lleva vencimiento.
+2. **A-07:** confirmar que la remesa numera por `contratos.id` ascendente.
+3. **A-08:** confirmar que la original solo pasa a `rectificada` con la `RE` completa.
+4. **A-17:** confirmar que Marga atiende el aviso y que se corrige con `RE` + `FA` nueva, sin editar la BD.
+5. **A-18:** confirmar que Marga posee el procedimiento y que la restauración se prueba cada trimestre.
+6. **A-19:** confirmar que el histórico no se toca y que el CSV exporta la suma de líneas con anexo de conciliación.
+7. **A-20:** confirmar que el alta de contratos se hace por plantilla SQL asistida por Julián.
+
+Además, el acta §7 recoge temas que no son anomalías de este registro y siguen abiertos: prueba de
+restauración de la copia diaria (cubierta por A-18), duración del envío manual (D-18), alcance de
+los tipos antiguos (D-19) y ratificación real del acta completa.
 
 ## 5. Estado de la lista PENDIENTE
 
-**No está vacía.** Quedan **7 entradas** en estado `PENDIENTE`/`PARCIAL` con pregunta de negocio:
-A-06, A-07, A-08, A-17, A-18, A-19 y A-20. Además hay **3 entradas técnicas** en
+**Vacía a efectos de decisión.** Hay **0 entradas** en estado `PENDIENTE`, `DUDOSA` o `PARCIAL` con
+pregunta de negocio. Quedan **7 entradas** en `RESUELTA_PROPUESTA` (A-06, A-07, A-08, A-17, A-18,
+A-19 y A-20), que no bloquean la partición pero requieren ratificación, y **3 entradas técnicas** en
 `ABIERTA_TECNICA` (A-21, A-22 y A-23) que no forman parte de la agenda de negocio.
 
-Por tanto, el reconocimiento **no está todavía listo para pasar a specs formales**. La agenda de la
-próxima conversación es la de la sección 4, más los temas adicionales del acta §7 que no son
-anomalías de este registro (prueba de restauración, duración del envío manual, alcance de los tipos
-antiguos y ratificación real). Cuando estas 7 entradas y esos temas se cierren o se reclasifiquen
-con testigo `NEGOCIO`, la lista PENDIENTE quedará vacía y el reconocimiento podrá cerrarse.
+Por tanto, el reconocimiento **puede pasar a specs formales** con una condición: cada spec debe
+marcar las decisiones `RESUELTA_PROPUESTA` como **provisionales** y no presentarlas como
+comportamiento actual ni como decisión ratificada. La implementación sigue congelada.
 
 ## 6. Trazabilidad
 
@@ -139,3 +168,4 @@ con testigo `NEGOCIO`, la lista PENDIENTE quedará vacía y el reconocimiento po
 - `memoria-historica.md` — MH01-MH31; actualizada con MH32-MH36.
 - `contradicciones.md` y `contradiccion-01` a `contradiccion-09`.
 - `acta-entrevista-negocio.md` y `notas-entrevista-negocio.md` — testigo `NEGOCIO`.
+- `propuesta-particion-specs.md` — partición en specs y reparto de reglas y anomalías.
