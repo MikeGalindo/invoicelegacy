@@ -2,12 +2,14 @@
 
 **Fecha:** 2026-10-30
 **Fase:** modernización, antes de abrir la spec 001.
-**Módulo analizado:** `services/calculo.js` (motor de cálculo de importes, spec 001 de
-`propuesta-particion-specs.md`).
+**Módulo analizado:** `services/calculo.js` (motor de cálculo). El primer seam propuesto cubre
+solo el núcleo de la spec 001 (`recargoPara`, `calcularLinea`, `porcentajeDescuento`,
+`calcularFactura`); `calcularProrrateo` pertenece a la spec 005 y queda fuera de esta extracción.
 **Fuentes:** `services/calculo.js`, `lib/util.js`, `lib/numeracion.js`, `routes/*.js`,
 `scripts/remesa_mensual.js`, `server.js`, `test/*.test.js`, `test/golden/flujo-central.js`,
 `test/COBERTURA.md`, `registro-anomalias.md` y `propuesta-particion-specs.md`.
-**Línea base verificada:** `npm test` → **116 tests, 116 en verde** (2026-10-30).
+**Línea base verificada:** `npm test` → **116 tests, 116 en verde** (2026-10-30; re-verificado
+el 2026-11-01 con el mismo resultado).
 **Nota de nomenclatura:** el repositorio usa `test/`, no `tests/`; los conteos de este documento
 se refieren a `test/*.test.js` y al modelo `test/golden/flujo-central.js`.
 
@@ -20,21 +22,27 @@ se refieren a `test/*.test.js` y al modelo `test/golden/flujo-central.js`.
 ## 0. Resumen ejecutivo
 
 Se evaluaron los módulos extraíbles que evidencian las specs 001 a 009. La recomendación es
-**extraer primero `services/calculo.js` (motor de cálculo, spec 001)**, por cuatro razones:
+**extraer primero el núcleo de `services/calculo.js` (motor de cálculo, spec 001)**, por cuatro
+razones:
 
-1. Es el único módulo con caracterización completa de todas sus funciones exportadas: **46 tests lo
-   ejecutan** y el golden master cubre **12 casos** del flujo central.
+1. Es el único módulo con caracterización completa de sus funciones: **40 tests ejecutan el núcleo
+   de la spec 001** y **46 ejecutan el fichero completo** (los 6 restantes solo ejercitan
+   `calcularProrrateo`, que pertenece a la spec 005). El golden master cubre **12 casos** del flujo
+   central.
 2. Es **puro**: no toca base de datos, red ni reloj; solo depende de `lib/util.redondear2`.
-3. Tiene **bajo acoplamiento**: únicamente **3 consumidores de producción** (`routes/facturas.js`,
-   `routes/contratos.js` y `scripts/remesa_mensual.js`) y **5 importadores de test**.
+3. Tiene **bajo acoplamiento**: únicamente **3 consumidores de producción** del fichero
+   (`routes/facturas.js`, `routes/contratos.js` y `scripts/remesa_mensual.js`) y **5 importadores
+   de test**. El primer seam solo afecta a los dos que usan `calcularFactura`; `routes/contratos.js`
+   sigue consumiendo el `calcularProrrateo` heredado.
 4. Es el punto de máximo riesgo económico: todas las facturas, manuales o de remesa, y todas las
    rectificativas pasan por él. Aislarlo reduce el riesgo de la modernización sin cambiar ni un
    céntimo del comportamiento congelado.
 
-La extracción del motor es una **extracción de equivalencia**, no un cambio funcional: A-09 ya
+La extracción del núcleo es una **extracción de equivalencia**, no un cambio funcional: A-09 ya
 describe el comportamiento actual y A-22/A-23 son deuda técnica. Por eso no requiere decidir un
 cambio de negocio; requiere demostrar que la implementación nueva produce exactamente la misma
-salida que la vieja.
+salida que la vieja. El prorrateo (`calcularProrrateo`, A-11) queda expresamente fuera: pertenece a
+la spec 005 y se extrae cuando esa spec se abra y A-11 esté ratificada.
 
 ---
 
@@ -76,7 +84,7 @@ prioridad no se confunda con una autorización.
 
 | # | Candidato (módulo) | Spec(s) | Decisiones y anomalías que lo tocan | Tests que lo ejercitan | Acoplamiento e IO | Valoración |
 |---|---|---|---|---|---|---|
-| 1 | `services/calculo.js` — motor de cálculo | 001 | **A-09** `RESUELTA_NEGOCIO` (D-07/N-07; confirma el comportamiento actual, no lo cambia); **A-22** y **A-23** `ABIERTA_TECNICA`; citas de A-14 y A-15 | **46 ejecutan** (28 de `calculo.test.js`, 10 de `reglas-negocio.test.js`, 5 de `anomalias.test.js`, 2 de `contradicciones.test.js`, 1 del golden master). **12 casos** golden dentro de 1 test | **Puro**. Único `require`: `lib/util` (`calculo.js:9`), y solo usa `redondear2`. 3 consumidores de producción. Sin BD, red ni reloj | **Primero** |
+| 1 | `services/calculo.js` — motor de cálculo | 001 (núcleo) y 005 (`calcularProrrateo`) | **A-09** `RESUELTA_NEGOCIO` (D-07/N-07; confirma el comportamiento actual, no lo cambia); **A-22** y **A-23** `ABIERTA_TECNICA`; citas de A-14 y A-15. **A-11** `RESUELTA_NEGOCIO` toca solo `calcularProrrateo` (spec 005), fuera del primer seam | **40 ejecutan el núcleo de 001** (25 de `calculo.test.js`, 9 de `reglas-negocio.test.js`, 4 de `anomalias.test.js`, 1 de `contradicciones.test.js`, 1 golden) y **46 el fichero completo** (6 tests solo de `calcularProrrateo`). **12 casos** golden dentro de 1 test | **Puro**. Único `require`: `lib/util` (`calculo.js:9`), y solo usa `redondear2`. 3 consumidores de producción del fichero; el primer seam solo toca los 2 de `calcularFactura`. Sin BD, red ni reloj | **Primero el núcleo**; `calcularProrrateo` con 005 |
 | 2 | `lib/util.js` — utilidades de fecha, NIF y formato | 002, 005, 006, 007, 008 (transversal) | **A-13**, **A-14**, **A-16** `RESUELTA_NEGOCIO`; **A-21** `ABIERTA_TECNICA`; citas de A-05, A-12 y A-23 | **36 ejecutan directamente** (17 propios + 7 de `reglas-negocio.test.js` + 6 de `anomalias.test.js` + 5 de `contradicciones.test.js` + 1 golden). **81** si se suma la ejecución transitiva vía `redondear2` en los 46 del motor (36 + 46 − 1: el golden es el único test común) | **Mixto**: funciones puras (`redondear2`, `fechaBonita`, `diasDelMes`, `validarNIF`, `formatearImporte`) y funciones de reloj (`hoy` en `util.js:10-15`, `sumarDias` en `util.js:20-26`). **6 importadores de producción**. Muy alta fan-in y transversal a todas las specs | No primero; extraer después, con cuidado |
 | 3 | `lib/numeracion.js` — numeración y series | 004 | **A-02** y **A-03** `RESUELTA_NEGOCIO`; **R1/R28** como riesgo técnico | **12 ejecutan** (11 de `numeracion.test.js` + A-03 de `anomalias.test.js`). **1 más** congela A-02 solo por fuente | **BD + reloj**. `require('../db')` en `numeracion.js:12`; `new Date().getFullYear()` en `:15`; `db.get`/`db.run` en `:16`, `:20`, `:32`. 2 ficheros de producción y 3 puntos de llamada. No es puro; callbacks asíncronos | **Segundo candidato**, pero no primero |
 | 4 | `routes/facturas.js` — emisión, cobro y rectificación | 002, 003 | **A-04**, **A-05** y **A-15** `RESUELTA_NEGOCIO`; **A-17**, **A-06** y **A-08** `RESUELTA_PROPUESTA`; citas de A-01 y A-12 | **0 ejecutan la ruta HTTP**. **12 congelan por fuente** (A-01, A-04, A-06, A-08, A-12, A-17 y contradicciones 03, 04, 05, 06, 08, 09). 1 caso golden modela la rectificación; 2 fixtures (A-15/A-19) validan datos del dominio, no la ruta | **BD + red (Express) + reloj**. `util.hoy()` en `:44` y `:142`; `calculo` en `:9`; `numeracion` en `:10`; `email` en `:11`; `config` en `:12`. No es puro; 166 líneas con varias responsabilidades | No primero; exige caracterización HTTP previa |
@@ -92,9 +100,10 @@ prioridad no se confunda con una autorización.
   pendiente implementar antes», ganarían las rutas de facturas (002/003), la remesa (006) o los
   informes (007). Pero la constitución exige **caracterización previa** y **equivalencia** antes de
   extraer; esos módulos tienen cero tests que ejecuten HTTP, SQL o el job.
-- **El motor es el que mejor combina criticidad y seguridad de extracción.** Su comportamiento es
-  el más crítico y, a la vez, el mejor congelado. Es el único candidato que permite hacer la primera
-  extracción sin abrir a la vez un debate de cambio de comportamiento.
+- **El núcleo del motor es el que mejor combina criticidad y seguridad de extracción.** Su
+  comportamiento es el más crítico y, a la vez, el mejor congelado. Es el único candidato que
+  permite hacer la primera extracción sin abrir a la vez un debate de cambio de comportamiento.
+  `calcularProrrateo` se aparta del primer seam porque su decisión A-11 pertenece a 005.
 - **La numeración es el segundo candidato natural**, pero su extracción toca BD y reloj y las
   decisiones A-02/A-03 sí cambian comportamiento (año de la fecha y reutilización del número). Eso
   la convierte en un módulo de comportamiento, no solo de equivalencia, y aumenta el riesgo legal.
@@ -108,22 +117,28 @@ prioridad no se confunda con una autorización.
 
 ### 3.1 Decisión
 
-**Extraer primero `services/calculo.js` con la spec 001 («Cálculo de importes, descuentos y
-redondeo»), sin cambiar su comportamiento observable.**
+**Extraer primero el núcleo de `services/calculo.js` con la spec 001 («Cálculo de importes,
+descuentos y redondeo»), sin cambiar su comportamiento observable.** El primer seam comprende
+`recargoPara`, `calcularLinea`, `porcentajeDescuento` y `calcularFactura`. `calcularProrrateo` se
+queda en el código heredado hasta abrir la spec 005: su comportamiento y su decisión A-11
+pertenecen a contratos/prorrateo, no al cálculo de importes.
 
 ### 3.2 Por qué
 
 1. **Cumple la precondición de la constitución.** El Principio II exige cobertura de caracterización
-   previa, incluidos los caminos congelados solo por fuente. El motor es el único módulo cuyas cinco
-   funciones exportadas están cubiertas directamente por tests y por el golden master. No hay que
-   abrir una línea de investigación de comportamiento antes de extraerlo.
+   previa, incluidos los caminos congelados solo por fuente. El núcleo del motor es el único conjunto
+   de funciones cuyos cuatro exports de la spec 001 están cubiertos directamente por 40 tests y por
+   el golden master. No hay que abrir una línea de investigación de comportamiento antes de
+   extraerlo. `calcularProrrateo` también está cubierto (7 tests), pero se extrae con 005.
 2. **Es puro y determinista.** `calculo.js` solo hace aritmética y `Math.round`; no lee la hora, no
    abre la BD y no hace red. Su única dependencia es `util.redondear2`, también pura. Una fachada
    nueva puede compararse con la vieja función a función, sin dobles de BD ni servidor HTTP.
-3. **El acoplamiento es pequeño y conocido.** Solo tres módulos de producción lo consumen, y solo
-   usan dos de sus cinco exports: `calcularFactura` y `calcularProrrateo`. Los otros tres
-   (`recargoPara`, `calcularLinea`, `porcentajeDescuento`) son API interna/test-facing. Esto permite
-   una costura limpia: se conserva la misma API y se cambia la implementación por detrás.
+3. **El acoplamiento es pequeño y conocido.** Solo tres módulos de producción consumen el fichero,
+   y usan dos de sus cinco exports: `calcularFactura` (2 consumidores) y `calcularProrrateo` (1).
+   Los otros tres (`recargoPara`, `calcularLinea`, `porcentajeDescuento`) son API interna/test-facing.
+   El primer seam solo toca `calcularFactura`; `routes/contratos.js` no se modifica porque sigue
+   usando el `calcularProrrateo` heredado. Esto permite una costura limpia: se conserva la misma API
+   y se cambia la implementación por detrás.
 4. **El coste de un error es máximo.** El aviso de `calculo.js:3-7` lo dice: la gestoría cuadra
    línea a línea y un cambio de redondeo devolvió un trimestre entero. Aislar y verificar el motor
    es la inversión de mayor retorno en reducción de riesgo.
@@ -140,24 +155,29 @@ redondeo»), sin cambiar su comportamiento observable.**
 - No cambiar la fórmula, el orden de redondeo ni los umbrales.
 - No «arreglar» A-22 (IVA en cadena sin recargo) ni A-23 (`-0`); siguen congelados.
 - No tocar A-09: ya es el comportamiento actual; si algún día se ratifica, seguirá sin cambio.
-- No modificar `routes/facturas.js`, `routes/contratos.js` ni `scripts/remesa_mensual.js` más allá
-  del punto de costura.
+- No modificar `routes/facturas.js` ni `scripts/remesa_mensual.js` más allá del punto de costura;
+  `routes/contratos.js` no se toca porque consume `calcularProrrateo`, que queda fuera del seam.
 - No recalcular facturas emitidas ni regenerar el golden master.
+- No extraer `calcularProrrateo` en el primer cambio: pertenece a la spec 005 y a la decisión A-11;
+  se queda en el módulo heredado y se aborda al abrir contratos. El primer seam no toca
+  `routes/contratos.js`.
 - No extraer a la vez `lib/util.js`; `redondear2` se queda donde está y se consume igual.
 
 ### 3.4 Orden sugerido después del motor
 
-1. **004 — Numeración**, tras añadir una prueba de concurrencia real o aceptar explícitamente el
+1. **005 — Contratos y prorrateo**, para extraer `calcularProrrateo` una vez ratificada A-11. La
+   ruta sigue sin tests HTTP: primero hay que caracterizar la baja y el prorrateo.
+2. **004 — Numeración**, tras añadir una prueba de concurrencia real o aceptar explícitamente el
    doble de BD; es pequeño y ya tiene 12 tests, pero exige seam de BD/reloj y ratificar A-02/A-03.
-2. **008 — Formatos y datos maestros**, empezando por las funciones puras de `util` y dejando
+3. **008 — Formatos y datos maestros**, empezando por las funciones puras de `util` y dejando
    `hoy`/`sumarDias` para el final; es transversal y necesita coordinación con todos los consumidores.
-3. **002/003 — Rutas de facturas**, después de crear tests HTTP con SQLite temporal o doble de
+4. **002/003 — Rutas de facturas**, después de crear tests HTTP con SQLite temporal o doble de
    `db.js`.
-4. **006 — Remesa**, después de un test end-to-end sobre copia desechable; es el candidato de mayor
+5. **006 — Remesa**, después de un test end-to-end sobre copia desechable; es el candidato de mayor
    riesgo operativo.
-5. **007 — Informes/CSV**, después de tests de SQL, CSV y tablero; el formato cerrado de la gestoría
+6. **007 — Informes/CSV**, después de tests de SQL, CSV y tablero; el formato cerrado de la gestoría
    es comportamiento observable.
-6. **009 — Operación**, en paralelo como trabajo documental, sin código.
+7. **009 — Operación**, en paralelo como trabajo documental, sin código.
 
 ### 3.5 Acoplamiento de los demás candidatos (importadores y funciones)
 
@@ -193,8 +213,8 @@ refuerza que el primer estrangulamiento sea el módulo puro con consumidores exp
 | `recargoPara(tipoIva)` | `calculo.js:12-23` | tipo de IVA → porcentaje de recargo | **Pura**: tabla fija, sin IO, sin reloj | Llamada por `calcularLinea` en `:31` |
 | `calcularLinea(cantidad, precio, tipoIva, conRecargo)` | `calculo.js:26-34` | línea cruda → `{base, cuotaIva, cuotaRecargo}` | **Pura**: aritmética + `util.redondear2`; sin IO/reloj | Llamada por `calcularFactura` en `:56` y `:71` |
 | `porcentajeDescuento(baseTotal)` | `calculo.js:39-43` | base bruta → 0, 2 o 5 | **Pura**: comparaciones estrictas; sin IO/reloj | Llamada por `calcularFactura` en `:60` |
-| `calcularFactura(lineas, cliente)` | `calculo.js:48-88` | líneas + cliente → `{lineas, base, iva, recargo, total, descuentoPct}` | **Pura**: crea objetos nuevos; no muta la entrada; sin IO/reloj | Exportada y consumida por 3 módulos de producción |
-| `calcularProrrateo(cuota, desde, hasta)` | `calculo.js:95-102` | cuota + fechas `YYYY-MM-DD` → importe | **Pura**: `split`, `parseInt`, aritmética y `redondear2`; sin IO/reloj | Exportada y consumida por `routes/contratos.js` |
+| `calcularFactura(lineas, cliente)` | `calculo.js:48-88` | líneas + cliente → `{lineas, base, iva, recargo, total, descuentoPct}` | **Pura**: crea objetos nuevos; no muta la entrada; sin IO/reloj | Exportada y consumida por **2** módulos de producción: `routes/facturas.js:66` y `scripts/remesa_mensual.js:55` |
+| `calcularProrrateo(cuota, desde, hasta)` | `calculo.js:95-102` | cuota + fechas `YYYY-MM-DD` → importe | **Pura**: `split`, `parseInt`, aritmética y `redondear2`; sin IO/reloj | **Spec 005, fuera del primer seam.** Exportada y consumida por `routes/contratos.js:39`; se queda en el código heredado hasta abrir contratos |
 
 **Evidencia de pureza del módulo:**
 
@@ -216,7 +236,9 @@ refuerza que el primer estrangulamiento sea el módulo puro con consumidores exp
 **Conclusión de producción:** solo **2 de las 5 funciones** se usan fuera del módulo:
 `calcularFactura` (2 consumidores) y `calcularProrrateo` (1 consumidor). `recargoPara`,
 `calcularLinea` y `porcentajeDescuento` no tienen consumidor de producción directo; solo las usan
-el propio motor y los tests.
+el propio motor y los tests. Para el primer seam solo cuentan los 2 consumidores de
+`calcularFactura`; el consumidor de `calcularProrrateo` (`routes/contratos.js:39`, spec 005) queda
+intacto.
 
 ### 4.3 Consumidores de test
 
@@ -228,9 +250,13 @@ el propio motor y los tests.
 | `test/contradicciones.test.js` | `test/contradicciones.test.js:9` | `calcularProrrateo` (`:34-35`, contradicción 01 comercial); `calcularFactura` (`:108-110`, contradicción 06 manual) | **2** |
 | `test/golden/flujo-central.js` | `test/golden/flujo-central.js:4` | `calcularFactura` (`:172`, para los 12 casos); `calcularProrrateo` (`:209`, casos con prorrateo) | **1** test de `test/golden-master.test.js` (`:52-66`), que cubre **12 casos** |
 
-**Total: 46 tests ejecutan el motor.** Si se contara también el segundo test de
-`test/golden-master.test.js` (`:68`), que valida la estructura del artefacto pero no llama al
-módulo, el número sería 47; aquí se usa el criterio estricto de ejecución.
+**Total: 46 tests ejecutan el fichero completo.** De ellos, **40 ejercitan el núcleo de la spec 001**
+y **6 solo `calcularProrrateo`**: 3 de `calculo.test.js` (RN-11), 1 de `reglas-negocio.test.js`
+(RN-11), 1 de `anomalias.test.js` (A-11) y 1 de `contradicciones.test.js` (contradicción 01
+comercial). El test del golden master es el único que aparece en ambos conjuntos porque usa
+`calcularFactura` y `calcularProrrateo`; por eso 40 + 7 − 1 = 46. Si se contara también el segundo
+test de `test/golden-master.test.js` (`:68`), que valida la estructura del artefacto pero no llama
+al módulo, el número sería 47; aquí se usa el criterio estricto de ejecución.
 
 ### 4.4 No consumidores (verificado)
 
@@ -256,7 +282,7 @@ lib/util.js  (redondear2)
 services/calculo.js
       ^
       |-- routes/facturas.js:9        -> calcularFactura:66
-      |-- routes/contratos.js:7       -> calcularProrrateo:39
+      |-- routes/contratos.js:7       -> calcularProrrateo:39  [spec 005; fuera del primer seam]
       |-- scripts/remesa_mensual.js:11 -> calcularFactura:55
       |
       |-- test/calculo.test.js:5
@@ -273,7 +299,8 @@ services/calculo.js
   `cuotaIva` y `cuotaRecargo` (`calculo.js:72-80`, `:50`, `:86`). Los consumidores dependen de esos
   nombres y del orden de las líneas.
 - `calcularProrrateo(cuota, desde, hasta)` devuelve un número redondeado a 2 decimales; el tope de
-  30 días y el mínimo de 0 forman parte del contrato (`calculo.js:98-101`).
+  30 días y el mínimo de 0 forman parte del contrato (`calculo.js:98-101`). No se toca en el primer
+  seam: su contrato se preserva tal cual para la spec 005.
 - `calcularFactura` acepta `cliente` nulo o indefinido y no aplica recargo (`:49`); acepta
   `recargo_equivalencia` numérico o cadena `'1'` por comparación laxa (`==`), comportamiento
   congelado en `test/calculo.test.js:199-219`.
@@ -282,20 +309,23 @@ services/calculo.js
 
 ---
 
-## 5. Plan mínimo de extracción del motor
+## 5. Plan mínimo de extracción del núcleo del motor
 
 1. **Línea base.** `npm test` en verde (116/116) sobre el código sin tocar. Registrar la salida.
 2. **Spec 001 aprobada.** Abrir la spec con el alcance de `propuesta-particion-specs.md` §Spec 001:
    RN-01 a RN-10, A-09, A-22 y A-23. Marcar A-09 como decisión registrada pendiente de ratificación
-   y A-22/A-23 como deuda técnica.
+   y A-22/A-23 como deuda técnica. El alcance excluye expresamente `calcularProrrateo` (spec 005).
 3. **Arnés de equivalencia.** Sin dependencias nuevas: un script de prueba que cargue la
-   implementación vieja y la nueva y compare, con los mismos fixtures, los cinco exports. Reutilizar
+   implementación vieja y la nueva y compare, con los mismos fixtures, los cuatro exports del
+   núcleo. `calcularProrrateo` se conserva sin tocar y se compara solo como referencia. Reutilizar
    los casos de `test/golden/flujo-central.js` y los tests de `test/calculo.test.js`.
 4. **Costura.** Crear el módulo nuevo detrás de una fachada que conserve exactamente la misma API y
-   los mismos nombres de campos. El código viejo sigue presente y ejecutable como referencia.
-5. **Verificación.** Mismos resultados en: 46 tests del motor, 12 casos del golden master, fronteras
-   1.000/5.000, descuento 2/5, recargo, prorrateo marzo/febrero/bisiesto y rectificativa espejo.
-   Comprobar también `-0`, `NaN` y las rarezas A-22/A-23.
+   los mismos nombres de campos. El código viejo sigue presente y ejecutable como referencia;
+   `calcularProrrateo` permanece en el módulo heredado.
+5. **Verificación.** Mismos resultados en: 40 tests del núcleo (más los 6 de `calcularProrrateo`
+   sin cambios), 12 casos del golden master, fronteras 1.000/5.000, descuento 2/5, recargo,
+   prorrateo marzo/febrero/bisiesto y rectificativa espejo. Comprobar también `-0`, `NaN` y las
+   rarezas A-22/A-23.
 6. **Conmutación.** Solo tras la equivalencia registrada. El código viejo se retira en un paso
    posterior y aprobado, nunca en el mismo cambio.
 7. **Cierre.** Actualizar `test/COBERTURA.md` si cambia el conteo, registrar la evidencia y no tocar
@@ -305,10 +335,14 @@ services/calculo.js
 
 ## 6. Riesgos, límites y preguntas
 
-- **Límite de la cobertura del motor.** Los 46 tests cubren el módulo puro, pero no las rutas HTTP ni
-  la remesa que lo consumen. Eso no impide extraer el motor: la costura está en el límite del
+- **Límite de la cobertura del motor.** Los 46 tests cubren el fichero puro, pero no las rutas HTTP
+  ni la remesa que lo consumen. Eso no impide extraer el núcleo: la costura está en el límite del
   módulo y los consumidores no cambian. Sí impide extraer después 002/003/006/007 sin añadir
   caracterización HTTP/job.
+- **El fichero abarca dos specs.** `services/calculo.js` contiene el núcleo de 001 y
+  `calcularProrrateo` (005). El primer seam debe limitarse al núcleo; extraer también el prorrateo
+  abriría dos specs y chocaría con A-11. Si se prefiere extraer el fichero entero, hace falta una
+  enmienda de partición o abrir 001 y 005 a la vez, lo que la constitución no permite.
 - **Dependencia oculta de `redondear2`.** Si en el futuro se extrae `lib/util.js`, cualquier cambio
   en `redondear2` altera el motor. El contrato de equivalencia debe incluir los artefactos de coma
   flotante que ya congela `test/util.test.js:20-30`.
@@ -317,9 +351,10 @@ services/calculo.js
 - **A-09 no es un cambio.** El descuento ya reduce base, IVA y recargo; la decisión D-07 confirma el
   comportamiento actual. No se debe introducir una «mejora» amparada en A-09.
 - **SUPOSICIÓN de planificación:** se asume que la extracción se hará con una fachada que mantenga
-  los cinco exports y los nombres de campos. Si el negocio o la spec exigieran cambiar la API
-  pública, dejaría de ser una extracción de equivalencia y requeriría decisión expresa. Queda como
-  pregunta de diseño, no como decisión tomada.
+  los cuatro exports del núcleo y los nombres de campo, y que conserve `calcularProrrateo` sin
+  tocar. Si el negocio o la spec exigieran cambiar la API pública, dejaría de ser una extracción de
+  equivalencia y requeriría decisión expresa. Queda como pregunta de diseño, no como decisión
+  tomada.
 - **Pregunta abierta:** ¿se autoriza que la implementación nueva viva en un fichero distinto con la
   misma API, o se exige mantener `services/calculo.js` como fachada? Es una decisión de ingeniería
   dentro de la costura, no de comportamiento; debe quedar en la spec 001.
@@ -344,7 +379,8 @@ services/calculo.js
 - `test/COBERTURA.md:6` — 116 tests en verde; `test/COBERTURA.md:35-77` — cobertura por regla.
 - `specs/000-reconocimiento/registro-anomalias.md:43-55` — A-01 a A-16 `RESUELTA_NEGOCIO`;
   `:65-73` — A-06 a A-20 `RESUELTA_PROPUESTA`; `:80-84` — A-21 a A-23 `ABIERTA_TECNICA`.
-- `specs/000-reconocimiento/propuesta-particion-specs.md:79-113` — spec 001 y sus anomalías;
-  `:193-215` — spec 004; `:253-287` — spec 006; `:290-322` — spec 007; `:325-360` — spec 008.
+- `specs/000-reconocimiento/propuesta-particion-specs.md:79-115` — spec 001 y su alcance (excluye
+  el prorrateo); `:187-217` — spec 004; `:218-252` — spec 005 y `calcularProrrateo`;
+  `:253-289` — spec 006; `:290-324` — spec 007; `:325-362` — spec 008.
 - `.specify/memory/constitution.md:34-91` — Principios I y II; `:93-121` — Principio III;
   `:153-174` — Principio V.
