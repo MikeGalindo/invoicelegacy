@@ -132,6 +132,8 @@ Envoltorio que genera `test/helpers/casos-equivalencia.js`. No forma parte del d
 | `lineas` | `LineaCruda[]` | 0 a 4 líneas. |
 | `cliente` | `Cliente` o `null` | Variantes de `recargo_equivalencia`. |
 | `conRecargo` | booleano | Para las llamadas sueltas a `calcularLinea`. |
+| `cantidad` | cualquiera | Para las llamadas sueltas a `calcularLinea`. |
+| `precio` | cualquiera | Para las llamadas sueltas a `calcularLinea`. |
 | `tipoIva` | cualquiera | Para las llamadas sueltas a `recargoPara`. |
 | `baseTotal` | número | Para `porcentajeDescuento`, incluida la frontera 1.000/5.000. |
 | `prorrateo` | `{ cuota, desde, hasta }` | Incluye casos válidos y malformados. |

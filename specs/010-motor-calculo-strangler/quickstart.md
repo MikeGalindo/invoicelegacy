@@ -32,7 +32,9 @@ los tres anillos y que la conmutación no toca nada fuera de la costura.
 npm test
 ```
 
-**Esperado**: `tests 116`, `pass 116`, `fail 0`, `skipped 0`. Duración aproximada: 150 ms.
+**Esperado antes de crear el arnés**: `tests 116`, `pass 116`, `fail 0`, `skipped 0`.
+**Esperado con la obra terminada**: `tests 122` (los 116 originales + los 6 del arnés), `fail 0`,
+`skipped 0`. Duración aproximada: 130 ms.
 
 Si esta línea base no está verde, **se detiene la obra**: no se moderniza encima de un rojo previo
 (`constitution.md:213-214`).

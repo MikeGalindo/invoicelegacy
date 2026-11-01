@@ -1,9 +1,10 @@
 # Cobertura de la red de characterization tests — GesFact 2.4
 
-**Fecha:** 2026-10-30
+**Fecha:** 2026-10-30 (actualizado el 2026-11-01 tras la spec 010)
 **Comando:** `npm test` (fija `TZ=Europe/Madrid`)
 **Runner:** `node --test` nativo. Sin dependencias nuevas.
-**Resultado de la última ejecución:** **116 tests, 116 en verde** (incluye golden master de 12 casos).
+**Resultado de la última ejecución:** **122 tests, 122 en verde** (incluye golden master de 12 casos
+y el arnés de equivalencia del motor de la spec 010).
 
 > Estos tests congelan el comportamiento **actual** del código, no el comportamiento deseado por
 > el acta de negocio. Si una decisión del acta contradice el código, el test sigue congelando el
@@ -21,6 +22,7 @@
 | `test/contradicciones.test.js` | Cada implementación de las contradicciones 01-09, por separado, incluida la que vive en rutas o jobs mediante comprobación de fuente. |
 | `test/anomalias.test.js` | Un test por anomalía del registro, con prefijo `CONGELA comportamiento actual:`. |
 | `test/golden-master.test.js` | Compara la salida completa del flujo central contra `test/golden/master.json`. |
+| `test/equivalencia-motor.test.js` | Equivalencia entre `motor/calculo.js` y la copia congelada del heredado sobre 100 casos deterministas, más contrato de API, invariantes, pureza y rarezas. |
 
 ## 2. Golden master
 
@@ -141,3 +143,17 @@ comportamiento real:
 
 Cualquier cambio futuro debe ejecutar `npm test`; si un test falla, primero se investiga si es una
 regresión. El golden master solo se regenera con una decisión de negocio documentada.
+
+## 7. Extracción del motor (spec 010)
+
+El motor de cálculo se extrajo a `motor/calculo.js` sin cambio de comportamiento; `services/calculo.js`
+es ahora una fachada que reexporta el motor. La verificación se hizo en tres anillos y está registrada
+en `specs/010-motor-calculo-strangler/evidencia.md`:
+
+- **Anillo (a)**: los 116 tests preexistentes pasan con el motor nuevo, sin modificarlos.
+- **Anillo (b)**: el golden master de 12 casos pasa sin regenerarse.
+- **Anillo (c)**: `test/equivalencia-motor.test.js` compara el motor nuevo con
+  `test/referencia/calculo-heredado.js` sobre 100 casos deterministas (semilla `20261101`).
+
+La copia `test/referencia/calculo-heredado.js` es la referencia congelada del código anterior y no debe
+editarse: se retirará en la fase posterior aprobada (FR-010 de la spec 010).
