@@ -283,3 +283,21 @@ Decisión: A-11 — Paco y Puri, 2026-10-30
 | El `diff` del golden incluye otros casos | Cambio colateral | Revertir la regeneración e investigar. |
 | Aparece un fichero fuera de §10 | Se ha tocado otro módulo | Revertir ese cambio (Principio III). |
 | Se ha ejecutado la remesa real | Riesgo de facturas emitidas | Detener, registrar el incidente y seguir el procedimiento de A-18; no volver a ejecutarla en pruebas. |
+
+---
+
+## 14. Evidencia de la ejecución (2026-11-02)
+
+| Comprobación | Comando | Resultado literal |
+|---|---|---|
+| Línea base | `npm test` | 122/122 antes del cambio |
+| Caso normativo | `node -e` con `(60, '2026-07-16', '2026-07-30')` | `29.03` |
+| Meses completos y parciales | script de §4–§5 | 9/9 casos correctos |
+| Paridad motor/remesa | `node --test test/contradicciones.test.js` | 18/18 tests, 0 diferencias |
+| Anillo C | `node --test test/equivalencia-motor.test.js` | 6/6 tests, 4 funciones con 0 diferencias |
+| Golden master | `node --test test/golden-master.test.js` | 2/2 tests; `diff` de 6 líneas (3 valores + 3 descripciones) |
+| Suite completa | `npm test` | **123/123**, 0 fallos, 0 saltados |
+| Perímetro | `git diff --name-only` | Solo los 11 ficheros previstos en §10 |
+| No retroactividad | `git diff` sin `datos/`, SQL, `UPDATE`/`DELETE` | 0 cambios históricos |
+
+La evidencia se ha generado sin abrir la base de datos ni ejecutar `scripts/remesa_mensual.js`.

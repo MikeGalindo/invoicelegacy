@@ -30,15 +30,63 @@ function prorrateoDiasReales(cuota, mes, desde, hasta) {
   return redondear(cuota / diasMes * diasServicio);
 }
 
-test('CONGELA comportamiento actual: contradicción 01, prorrateo comercial de 30 días', function () {
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 45);
-  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-15'), 45);
+test('CONGELA comportamiento actual: contradicción 01, prorrateo único por días reales', function () {
+  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 43.55);
+  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-15'), 48.21);
 });
 
 test('CONGELA comportamiento actual: contradicción 01, prorrateo de la remesa por días reales', function () {
   assert.equal(prorrateoDiasReales(90, '2026-03', '2026-03-01', '2026-03-15'), 43.55);
   assert.equal(prorrateoDiasReales(90, '2026-02', '2026-02-01', '2026-02-15'), 48.21);
   assert.equal(prorrateoDiasReales(60, '2025-09', '2025-09-01', '2025-09-15'), 30);
+});
+
+// A-11/D-03 y spec 011: el motor y la remesa comparten la convención de días
+// reales. La remesa no admite periodos invertidos (su SQL garantiza
+// desde <= hasta), así que esos se comprueban solo en el motor.
+test('CONGELA comportamiento actual: contradicción 01, motor y remesa coinciden', function () {
+  var meses = [
+    '2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06',
+    '2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12',
+    '2028-02'
+  ];
+
+  for (var i = 0; i < meses.length; i++) {
+    var mes = meses[i];
+    var primerDia = mes + '-01';
+    var ultimoDia = mes + '-' + util.diasDelMes(primerDia);
+    var dia15 = mes + '-15';
+
+    assert.equal(
+      calc.calcularProrrateo(90, primerDia, ultimoDia),
+      prorrateoDiasReales(90, mes, primerDia, ultimoDia),
+      mes + ': mes completo'
+    );
+    assert.equal(
+      calc.calcularProrrateo(90, primerDia, dia15),
+      prorrateoDiasReales(90, mes, primerDia, dia15),
+      mes + ': del 1 al 15'
+    );
+  }
+
+  var parciales = [
+    ['2026-07', '2026-07-16', '2026-07-30'],
+    ['2026-07', '2026-07-01', '2026-07-30'],
+    ['2026-07', '2026-07-16', '2026-07-31'],
+    ['2026-07', '2026-07-16', '2026-07-16'],
+    ['2026-02', '2026-02-01', '2026-02-28'],
+    ['2028-02', '2028-02-01', '2028-02-29']
+  ];
+
+  for (var j = 0; j < parciales.length; j++) {
+    assert.equal(
+      calc.calcularProrrateo(60, parciales[j][1], parciales[j][2]),
+      prorrateoDiasReales(60, parciales[j][0], parciales[j][1], parciales[j][2]),
+      parciales[j][0] + ': ' + parciales[j][1] + ' a ' + parciales[j][2]
+    );
+  }
+
+  assert.equal(calc.calcularProrrateo(90, '2026-03-15', '2026-03-01'), 0);
 });
 
 test('CONGELA comportamiento actual: contradicción 01, la remesa usa días reales inline', function () {

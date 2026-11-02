@@ -126,7 +126,7 @@ var CASOS = [
   },
   {
     id: 'prorrateo-marzo',
-    descripcion: 'Cuota de 90 € con baja el 15 de marzo: 30 días frente a días reales',
+    descripcion: 'Cuota de 90 € con baja el 15 de marzo: prorrateo único por días reales',
     numero: 'FA-2026-000209',
     fecha: '2026-03-31',
     diasPago: null,
@@ -136,7 +136,7 @@ var CASOS = [
   },
   {
     id: 'prorrateo-febrero',
-    descripcion: 'Cuota de 90 € con baja el 15 de febrero: 30 días frente a días reales',
+    descripcion: 'Cuota de 90 € con baja el 15 de febrero: prorrateo único por días reales',
     numero: 'FA-2026-000210',
     fecha: '2026-02-28',
     diasPago: null,
@@ -146,7 +146,7 @@ var CASOS = [
   },
   {
     id: 'febrero-bisiesto',
-    descripcion: 'Factura de 2028-02-28 con vencimiento a 30 días y prorrateo de febrero bisiesto',
+    descripcion: 'Factura de 2028-02-28 con vencimiento a 30 días y prorrateo por días reales de febrero bisiesto',
     numero: 'FA-2028-000001',
     fecha: '2028-02-28',
     diasPago: null,

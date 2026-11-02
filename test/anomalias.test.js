@@ -103,9 +103,9 @@ test('CONGELA comportamiento actual: A-10 el tablero ignora los abonos RE', func
   assert.doesNotMatch(fuente('server.js'), /serie = 'RE'/);
 });
 
-// A-11: comportamiento actual congelado.
-test('CONGELA comportamiento actual: A-11 conviven dos prorrateos', function () {
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 45);
+// A-11: prorrateo único por días reales (decisión A-11/D-03, spec 011).
+test('CONGELA comportamiento actual: A-11 prorrateo único por días reales', function () {
+  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 43.55);
   assert.match(fuente('scripts/remesa_mensual.js'), /co\.cuota \/ diasMes \* diasServicio/);
 });
 

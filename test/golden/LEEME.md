@@ -9,12 +9,16 @@
 
 `master.json` es la foto completa y estable de la salida del flujo central de negocio:
 factura manual, descuento por volumen, recargo de equivalencia, redondeo por línea,
-vencimiento, prorrateo comercial, prorrateo por días reales y rectificación espejo. Contiene
+vencimiento, prorrateo por días reales y rectificación espejo. Contiene
 12 casos fijos y, para cada uno, la entrada y la salida completa con importes a dos decimales.
 
 El fichero está ordenado por claves para que el `diff` sea legible. No incluye fechas de
 generación ni datos variables: debe poder regenerarse y dar exactamente el mismo contenido
 mientras el comportamiento no cambie.
+
+> **Nombre heredado:** el campo `prorrateoComercial` conserva su nombre para no cambiar el
+> esquema del golden. Desde la spec 011 contiene la misma convención de días reales que
+> `prorrateoDiasReales`; ambos campos deben coincidir en los tres casos con prorrateo.
 
 ## Cuándo DEBE regenerarse
 
@@ -57,9 +61,9 @@ en casos que no debían cambiar, no se acepta la regeneración.
 6. Frontera de 1.000,00 € sin descuento.
 7. Frontera de 5.000,00 € con 2 %, no con 5 %.
 8. Redondeo por línea con dos líneas de 0,03 €.
-9. Prorrateo de marzo: 30 días frente a días reales.
-10. Prorrateo de febrero: 30 días frente a días reales.
-11. Febrero bisiesto de 2028 y vencimiento a 30 días.
+9. Prorrateo de marzo: convención única por días reales.
+10. Prorrateo de febrero: convención única por días reales.
+11. Febrero bisiesto de 2028, prorrateo por días reales y vencimiento a 30 días.
 12. Rectificación espejo de la factura simple.
 
 ## Limitaciones

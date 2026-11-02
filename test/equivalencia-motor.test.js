@@ -138,13 +138,18 @@ test('EQUIVALENCIA: 100 casos generados dan la misma salida campo a campo', func
       function () { return heredado.porcentajeDescuento(c.baseTotal); },
       function () { return nuevo.porcentajeDescuento(c.baseTotal); }) ? 1 : 0;
 
-    lanzamientos += exigirIgual('caso ' + c.id + ' calcularProrrateo',
-      function () { return heredado.calcularProrrateo(c.prorrateo.cuota, c.prorrateo.desde, c.prorrateo.hasta); },
-      function () { return nuevo.calcularProrrateo(c.prorrateo.cuota, c.prorrateo.desde, c.prorrateo.hasta); }) ? 1 : 0;
+    // A-11/D-03 y specs/011-prorrateo-dias-reales/spec.md: calcularProrrateo
+    // es la única divergencia intencionada respecto al heredado. Se excluye de
+    // esta comparación; las otras cuatro funciones siguen con igualdad exacta.
   }
 
-  // La batería incluye a propósito un prorrateo con `desde` nulo: la excepción
-  // también debe ser equivalente, no un caso que se salte.
+  // El prorrateo ya no aporta la excepción de la batería. Se conserva la
+  // comprobación de que las excepciones también se comparan con una llamada
+  // que sigue siendo equivalente en ambas implementaciones.
+  lanzamientos += exigirIgual('excepción calcularFactura(null)',
+    function () { return heredado.calcularFactura(null, null); },
+    function () { return nuevo.calcularFactura(null, null); }) ? 1 : 0;
+
   assert.ok(lanzamientos >= 1, 'la batería debe comparar al menos una excepción');
 });
 

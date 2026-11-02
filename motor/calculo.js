@@ -92,17 +92,19 @@ function calcularFactura(lineas, cliente) {
 }
 
 // Prorrateo de cuotas mensuales de contrato.
-// Se prorratea "a lo comercial": el mes son siempre 30 días y se cobra
-// (cuota/30) * días de servicio. Así lo hacía Paco a mano en el Access y así lo
-// espera la gestoría. El día 31 de un mes de 31 días no se cobra.
+// Convención única aprobada en A-11/D-03 (Paco y Puri, 2026-10-30) y
+// desarrollada en la spec 011: se prorratea por los días reales del mes.
+// El día 31 de un mes de 31 días SÍ se cobra. Es la misma fórmula que usa la
+// remesa (scripts/remesa_mensual.js:47-51), de modo que la baja de contrato y
+// la remesa coinciden para el mismo periodo.
 // desde/hasta: YYYY-MM-DD dentro del MISMO mes. No se valida el formato.
 function calcularProrrateo(cuota, desde, hasta) {
   const d1 = parseInt(desde.split('-')[2], 10);
   const d2 = parseInt(hasta.split('-')[2], 10);
+  const diasMes = util.diasDelMes(desde);
   let dias = d2 - d1 + 1;
-  if (dias > 30) dias = 30;
   if (dias < 0) dias = 0;
-  return util.redondear2(cuota / 30 * dias);
+  return util.redondear2(cuota / diasMes * dias);
 }
 
 module.exports = {

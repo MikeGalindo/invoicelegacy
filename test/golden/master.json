@@ -453,7 +453,7 @@
       }
     },
     {
-      "descripcion": "Cuota de 90 € con baja el 15 de marzo: 30 días frente a días reales",
+      "descripcion": "Cuota de 90 € con baja el 15 de marzo: prorrateo único por días reales",
       "entrada": {
         "cliente": {
           "recargo_equivalencia": 0
@@ -501,13 +501,13 @@
           "total": "108.90",
           "vencimiento": "2026-04-30"
         },
-        "prorrateoComercial": "45.00",
+        "prorrateoComercial": "43.55",
         "prorrateoDiasReales": "43.55",
         "rectificativa": null
       }
     },
     {
-      "descripcion": "Cuota de 90 € con baja el 15 de febrero: 30 días frente a días reales",
+      "descripcion": "Cuota de 90 € con baja el 15 de febrero: prorrateo único por días reales",
       "entrada": {
         "cliente": {
           "recargo_equivalencia": 0
@@ -555,13 +555,13 @@
           "total": "108.90",
           "vencimiento": "2026-03-30"
         },
-        "prorrateoComercial": "45.00",
+        "prorrateoComercial": "48.21",
         "prorrateoDiasReales": "48.21",
         "rectificativa": null
       }
     },
     {
-      "descripcion": "Factura de 2028-02-28 con vencimiento a 30 días y prorrateo de febrero bisiesto",
+      "descripcion": "Factura de 2028-02-28 con vencimiento a 30 días y prorrateo por días reales de febrero bisiesto",
       "entrada": {
         "cliente": {
           "recargo_equivalencia": 0
@@ -609,7 +609,7 @@
           "total": "108.90",
           "vencimiento": "2028-03-29"
         },
-        "prorrateoComercial": "45.00",
+        "prorrateoComercial": "46.55",
         "prorrateoDiasReales": "46.55",
         "rectificativa": null
       }

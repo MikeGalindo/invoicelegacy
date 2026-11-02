@@ -1,10 +1,10 @@
 # Cobertura de la red de characterization tests — GesFact 2.4
 
-**Fecha:** 2026-10-30 (actualizado el 2026-11-01 tras la spec 010)
+**Fecha:** 2026-10-30 (actualizado el 2026-11-02 tras la spec 011)
 **Comando:** `npm test` (fija `TZ=Europe/Madrid`)
 **Runner:** `node --test` nativo. Sin dependencias nuevas.
-**Resultado de la última ejecución:** **122 tests, 122 en verde** (incluye golden master de 12 casos
-y el arnés de equivalencia del motor de la spec 010).
+**Resultado de la última ejecución:** **123 tests, 123 en verde** (incluye golden master de 12 casos,
+el arnés de equivalencia del motor de la spec 010 y la paridad motor/remesa de la spec 011).
 
 > Estos tests congelan el comportamiento **actual** del código, no el comportamiento deseado por
 > el acta de negocio. Si una decisión del acta contradice el código, el test sigue congelando el
@@ -48,7 +48,7 @@ redondeo por línea, prorrateo marzo/febrero, febrero bisiesto y rectificación 
 | RN-08 descuento línea a línea | Completa | `calculo.test.js` |
 | RN-09 recargo sobre base descontada | Completa | `calculo.test.js` |
 | RN-10 total base + IVA + recargo | Completa | `calculo.test.js` |
-| RN-11 prorrateo comercial | Completa (modelo puro) | `calculo.test.js`, `contradicciones.test.js` |
+| RN-11 prorrateo por días reales | Completa | `calculo.test.js`, `reglas-negocio.test.js`, `contradicciones.test.js` |
 | RN-12 vencimiento por defecto | Parcial: config + suma de días; la rama `dias_pago ||` vive en ruta | `reglas-negocio.test.js`; `contradicciones.test.js` |
 | RN-13 suma de días en milisegundos | Completa, incluido cambio de hora | `util.test.js` |
 | RN-14 días reales del mes | Completa | `util.test.js` |
@@ -73,7 +73,7 @@ redondeo por línea, prorrateo marzo/febrero, febrero bisiesto y rectificación 
 | RN-33 año/trimestre por defecto | Fuera: ruta HTTP | — |
 | RN-34 tablero solo FA | Fuera: SQL; fuente congelada | `anomalias.test.js` |
 | RN-35 selección de contratos | Fuera: job + SQL | — |
-| RN-36 prorrateo por días reales | Parcial: modelo inline | `contradicciones.test.js`, `golden-master.test.js` |
+| RN-36 prorrateo por días reales | Completa: motor y modelo inline coinciden | `contradicciones.test.js`, `golden-master.test.js` |
 | RN-37 vencimiento de remesa | Parcial: fuente congelada | `anomalias.test.js`, `contradicciones.test.js` |
 | RN-38 línea única y nota de remesa | Fuera: job | — |
 | RN-39 remesa no idempotente | Fuera: job; ausencia de guarda congelada por fuente | `anomalias.test.js` |
@@ -92,7 +92,7 @@ redondeo por línea, prorrateo marzo/febrero, febrero bisiesto y rectificación 
 | A-08 | Rectificación ignora error de línea | fuente |
 | A-09 | Descuento reduce recargo | puro |
 | A-10 | Tablero ignora RE | fuente |
-| A-11 | Dos prorrateos | puro + fuente |
+| A-11 | Prorrateo único por días reales (implementado, spec 011) | puro + fuente |
 | A-12 | Vencimiento manual/remesa distinto | puro + fuente |
 | A-13 | Dos formatos de importe | puro |
 | A-14 | IVA por defecto según maestro | puro + fuente |
@@ -122,7 +122,8 @@ comportamiento real:
   dashboard.
 - **Job de remesa** (`scripts/remesa_mensual.js`): no se ejecuta; no se prueba la selección de
   contratos, la escritura real, el `exit 1`, la idempotencia ni el orden de numeración. Su fórmula
-  de prorrateo se congela como modelo en el golden master.
+  de prorrateo se congela como modelo en el golden master y se compara con el motor en
+  `contradicciones.test.js` (spec 011).
 - **Base de datos** (`db.js`, `datos/gesfact.db`): no se abre SQLite; el esquema, la siembra, los
   `INSERT` y las consultas no tienen test de integración. `lib/numeracion` usa un doble.
 - **Vistas EJS y estáticos** (`views/*.ejs`, `public/js/factura.js`, `public/css`): no se renderizan

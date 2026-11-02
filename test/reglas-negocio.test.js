@@ -82,9 +82,9 @@ test('RN-10 total = base + IVA + recargo, todo redondeado', function () {
   assert.equal(r.total, 93.39);
 });
 
-test('RN-11 prorrateo comercial de 30 días', function () {
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 45);
-  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-15'), 45);
+test('RN-11 prorrateo por días reales del mes', function () {
+  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 43.55);
+  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-15'), 48.21);
 });
 
 test('RN-12 (parte pura) el plazo por defecto configurado es 30 días', { skip: SKIP_FECHAS }, function () {

@@ -247,27 +247,33 @@ test('Anomalía A-14: una línea sin tipoIva produce NaN en IVA y total', functi
   assert.equal(Number.isNaN(r.total), true);
 });
 
-test('RN-11 calcularProrrateo usa mes comercial de 30 días', function () {
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 45);
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-30'), 90);
+test('RN-11 calcularProrrateo usa los días reales del mes', function () {
+  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-15'), 43.55);
+  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-30'), 87.1);
   assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-31'), 90);
-  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-15'), 45);
+  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-15'), 48.21);
   assert.equal(calc.calcularProrrateo(60, '2025-09-01', '2025-09-15'), 30);
-  assert.equal(calc.calcularProrrateo(60, '2025-08-01', '2025-08-15'), 30);
+  assert.equal(calc.calcularProrrateo(60, '2025-08-01', '2025-08-15'), 29.03);
+  assert.equal(calc.calcularProrrateo(60, '2026-07-16', '2026-07-30'), 29.03);
 });
 
-test('RN-11 calcularProrrateo topa en 30 días y no baja de 0 días', function () {
+test('RN-11 el día 31 se cobra y los meses completos dan la cuota íntegra', function () {
   assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-31'), 90);
-  assert.equal(calc.calcularProrrateo(90, '2026-03-15', '2026-03-01'), 0);
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-01'), 3);
-  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-02'), 6);
+  assert.equal(calc.calcularProrrateo(90, '2026-04-01', '2026-04-30'), 90);
+  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-28'), 90);
+  assert.equal(calc.calcularProrrateo(90, '2028-02-01', '2028-02-29'), 90);
+  assert.equal(calc.calcularProrrateo(60, '2026-07-01', '2026-07-30'), 58.06);
+  assert.equal(calc.calcularProrrateo(60, '2026-07-16', '2026-07-31'), 30.97);
+  assert.equal(calc.calcularProrrateo(60, '2026-07-16', '2026-07-16'), 1.94);
+  assert.equal(calc.calcularProrrateo(90, '2026-03-01', '2026-03-02'), 5.81);
 });
 
 test('RN-11 calcularProrrateo con cero, negativo, NaN y fechas inválidas', function () {
   assert.equal(calc.calcularProrrateo(0, '2026-03-01', '2026-03-15'), 0);
-  assert.equal(calc.calcularProrrateo(-90, '2026-03-01', '2026-03-15'), -45);
+  assert.equal(calc.calcularProrrateo(-90, '2026-03-01', '2026-03-15'), -43.55);
   assert.equal(Number.isNaN(calc.calcularProrrateo(NaN, '2026-03-01', '2026-03-15')), true);
   assert.equal(Number.isNaN(calc.calcularProrrateo(90, 'basura', '2026-03-15')), true);
-  assert.equal(calc.calcularProrrateo(90, '2026-13-01', '2026-13-15'), 45);
-  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-29'), 87);
+  assert.equal(calc.calcularProrrateo(90, '2026-03-15', '2026-03-01'), 0);
+  assert.equal(calc.calcularProrrateo(90, '2026-13-01', '2026-13-15'), 43.55);
+  assert.equal(calc.calcularProrrateo(90, '2026-02-01', '2026-02-29'), 93.21);
 });

@@ -131,6 +131,15 @@ ratificación. No sustituyen al historial de la sección 3.
 | 2026-10-30 | A-19 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Histórico inmutable + anexo de conciliación. |
 | 2026-10-30 | A-20 | `PENDIENTE` | `RESUELTA_PROPUESTA` | Propuesta del analista, 2026-10-30 | Alta asistida por plantilla SQL. |
 
+## 3 ter. Implementación en la fase de modernización
+
+Estos cambios no reescriben la decisión ni el historial anterior: anotan que una decisión ya
+ratificada se ha implementado en código.
+
+| Fecha | ID | Antes | Después | Evidencia | Nota |
+|---|---|---|---|---|---|
+| 2026-11-02 | A-11 | `RESUELTA_NEGOCIO` | `CERRADA` (implementada) | `specs/011-prorrateo-dias-reales/spec.md`; `motor/calculo.js:94-108`; `test/calculo.test.js:250-279`; `test/contradicciones.test.js:33-97` | `calcularProrrateo` usa los días reales del mes (día 31 incluido). La baja de contrato y la remesa comparten la misma convención. No se tocan facturas históricas. |
+
 ## 4. Agenda de ratificación
 
 La lista PENDIENTE de negocio está vacía. No hay preguntas nuevas que bloqueen la partición, pero
